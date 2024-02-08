@@ -5,7 +5,6 @@ import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import ru.job4j.cars.model.User;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -79,7 +78,7 @@ public class UserRepository {
             session.beginTransaction();
             usersList = session.createQuery("from User", User.class).getResultList();
             session.getTransaction().commit();
-        }catch (Exception e){
+        } catch (Exception e) {
             session.getTransaction().rollback();
         }
         return usersList;
@@ -99,10 +98,9 @@ public class UserRepository {
             query.setParameter("fId", userId);
             userOptional = Optional.of(query.getSingleResult());
             session.getTransaction().commit();
-        }catch (Exception e) {
+        } catch (Exception e) {
             session.getTransaction().rollback();
         }
-
         return userOptional;
     }
 
@@ -121,7 +119,7 @@ public class UserRepository {
             query.setParameter("fKey",  "%" + key + "%");
             usersList = query.getResultList();
             session.getTransaction().commit();
-        }catch (Exception e) {
+        } catch (Exception e) {
             session.getTransaction().rollback();
         }
         return usersList;
@@ -142,7 +140,6 @@ public class UserRepository {
         } catch (Exception e) {
             session.getTransaction().rollback();
         }
-
         return Optional.empty();
     }
 }
