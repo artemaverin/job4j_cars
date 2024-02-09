@@ -26,6 +26,8 @@ public class UserRepository {
             session.getTransaction().commit();
         } catch (Exception e) {
             session.getTransaction().rollback();
+        } finally {
+            session.close();
         }
         return user;
     }
@@ -46,6 +48,8 @@ public class UserRepository {
             session.getTransaction().commit();
         } catch (Exception e) {
             session.getTransaction().rollback();
+        } finally {
+            session.close();
         }
     }
 
@@ -64,6 +68,8 @@ public class UserRepository {
             session.getTransaction().commit();
         } catch (Exception e) {
             session.getTransaction().rollback();
+        } finally {
+            session.close();
         }
     }
 
@@ -80,6 +86,8 @@ public class UserRepository {
             session.getTransaction().commit();
         } catch (Exception e) {
             session.getTransaction().rollback();
+        } finally {
+            session.close();
         }
         return usersList;
     }
@@ -96,10 +104,13 @@ public class UserRepository {
             Query<User> query = session.createQuery(
                     "from User as i where i.id = :fId", User.class);
             query.setParameter("fId", userId);
-            userOptional = Optional.of(query.getSingleResult());
+            userOptional = query.uniqueResultOptional();
+
             session.getTransaction().commit();
         } catch (Exception e) {
             session.getTransaction().rollback();
+        } finally {
+            session.close();
         }
         return userOptional;
     }
@@ -121,6 +132,8 @@ public class UserRepository {
             session.getTransaction().commit();
         } catch (Exception e) {
             session.getTransaction().rollback();
+        } finally {
+            session.close();
         }
         return usersList;
     }
@@ -132,14 +145,19 @@ public class UserRepository {
      */
     public Optional<User> findByLogin(String login) {
         var session = sf.openSession();
+        Optional<User> userOptional = Optional.empty();
         try {
+            session.beginTransaction();
             Query<User> query = session.createQuery(
                     "from User as i where i.login = :fLogin", User.class);
             query.setParameter("fLogin", login);
-            return Optional.ofNullable(query.getSingleResult());
+            userOptional = query.uniqueResultOptional();
+            session.getTransaction().commit();
         } catch (Exception e) {
             session.getTransaction().rollback();
+        } finally {
+            session.close();
         }
-        return Optional.empty();
+        return userOptional;
     }
 }
