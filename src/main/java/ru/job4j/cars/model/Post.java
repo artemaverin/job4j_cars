@@ -30,4 +30,5 @@ public class Post {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "post_id")
     private List<PriceHistory> priceHistories = new ArrayList<>();
+
 }
